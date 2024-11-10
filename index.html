@@ -1,13 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>Doodle Jump</title>
   <link rel="stylesheet" href="style.css">
-  <script src="app.js" charset="utf-8"></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="grid">
-    
+  <!-- Landing Page -->
+  <div id="landing-page">
+    <h1>Doodle Jump</h1>
+    <button id="start-button">Start Game</button>
   </div>
+
+  <!-- Game Page -->
+  <div class="grid" id="game-area" style="display: none;">
+    <!-- Doodler and platforms will go here -->
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="game-over" style="display: none;">
+    <h1>Game Over</h1>
+    <div id="score-display"></div>
+    <button id="restart-button">Restart Game</button>
+  </div>
+</body>
 </html>

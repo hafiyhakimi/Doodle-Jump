@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.querySelector('.grid');
+    const landingPage = document.getElementById('landing-page');
+    const startButton = document.getElementById('start-button');
+    const gameOverPage = document.getElementById('game-over');
+    const restartButton = document.getElementById('restart-button');
+    const gameArea = document.getElementById('game-area');
     const doodler = document.createElement('div');
     let doodlerLeftSpace = 50;
     let startPoint = 150;
@@ -15,15 +19,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let leftTimerId;
     let rightTimerId;
     let score = 0;
+    let platformIntervalId;
 
+    // Start Game
+    startButton.addEventListener('click', start);
+
+    // Restart Game
+    restartButton.addEventListener('click', start);
+
+    // Function to create Doodler
     function createDoodler() {
-        grid.appendChild(doodler);
+        gameArea.appendChild(doodler);
         doodler.classList.add('doodler');
         doodlerLeftSpace = platforms[0].left;
         doodler.style.left = doodlerLeftSpace + 'px';
         doodler.style.bottom = doodlerBottomSpace + 'px';
     }
 
+    // Platform class and createPlatforms function
     class Platform {
         constructor(newPlatBottom) {
             this.bottom = newPlatBottom;
@@ -34,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             visual.classList.add('platform');
             visual.style.left = this.left + 'px';
             visual.style.bottom = this.bottom + 'px';
-            grid.appendChild(visual);
+            gameArea.appendChild(visual);
         }
     }
 
@@ -44,10 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let newPlatBottom = 100 + i * platGap;
             let newPlatform = new Platform(newPlatBottom);
             platforms.push(newPlatform);
-            console.log(platforms);
         }
     }
 
+    // Game control functions (movePlatforms, jump, fall, control, etc.)
     function movePlatforms() {
         if (doodlerBottomSpace > 200) {
             platforms.forEach(platform => {
@@ -60,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     firstPlatform.classList.remove('platform');
                     platforms.shift();
                     score++;
-                    console.log(platforms);
                     let newPlatform = new Platform(600);
                     platforms.push(newPlatform);
                 }
@@ -97,12 +109,103 @@ document.addEventListener('DOMContentLoaded', () => {
                     (doodlerLeftSpace <= (platform.left + 85)) &&
                     !isJumping
                 ) {
-                    console.log('landed');
                     startPoint = doodlerBottomSpace;
                     jump();
                 }
             })
         }, 30);
+    }
+
+    // Reset all movement states
+    function resetMovementStates() {
+        isGoingLeft = false;
+        isGoingRight = false;
+        clearInterval(leftTimerId);
+        clearInterval(rightTimerId);
+    }
+
+
+
+    // Display Game Over Screen
+    function gameOver() {
+        isGameOver = true;
+
+        // Clear the interval for moving platforms
+        clearInterval(platformIntervalId);
+
+        // Clear game area: remove all platforms and doodler
+        while (gameArea.firstChild) {
+            gameArea.removeChild(gameArea.firstChild);
+        }
+
+        // Reset platforms and doodler array
+        platforms = [];
+        if (doodler) {
+            doodler.remove();
+        }
+
+        // Hide game area and show game over page
+        gameArea.style.display = 'none';
+        gameOverPage.style.display = 'flex';
+        document.getElementById('score-display').innerText = 'Your score is: ' + score;
+
+        // Clear any active timers
+        clearInterval(upTimerId);
+        clearInterval(downTimerId);
+        clearInterval(leftTimerId);
+        clearInterval(rightTimerId);
+
+        // Remove event listeners for controls
+        document.removeEventListener('keyup', control);
+    }
+
+    // Start or Restart Game
+    function start() {
+        // If the game is over, reset everything before starting again
+        if (isGameOver) {
+            // Hide game over screen
+            gameOverPage.style.display = 'none';
+
+            // Reset game state
+            score = 0;  // Reset score
+            isGameOver = false;  // Game is not over anymore
+            platforms = [];  // Reset platforms array
+            doodlerBottomSpace = startPoint;  // Reset doodler position
+            doodlerLeftSpace = 50;  // Reset doodler horizontal position
+
+            // Clear any existing platforms and doodler
+            while (gameArea.firstChild) {
+                gameArea.removeChild(gameArea.firstChild);
+            }
+
+            // Hide game over page and show game area
+            gameArea.style.display = 'block';
+
+            // Reset timers
+            clearInterval(upTimerId);
+            clearInterval(downTimerId);
+            clearInterval(leftTimerId);
+            clearInterval(rightTimerId);
+        }
+
+        // Reset movement states
+        resetMovementStates();
+
+        landingPage.style.display = 'none';
+        gameArea.style.display = 'block';
+        gameOverPage.style.display = 'none';
+
+        // Create new platforms and doodler
+        createPlatforms();
+        createDoodler();
+
+        // Re-start the game loop
+        // Start platform movement interval (ensure only one interval is running)
+        platformIntervalId = setInterval(movePlatforms, 30);
+        jump(startPoint);
+
+        // Reattach event listeners for controls
+        document.addEventListener('keyup', control);
     }
 
     function moveLeft() {
@@ -152,28 +255,4 @@ document.addEventListener('DOMContentLoaded', () => {
             moveStraight()
         }
     }
-
-    function gameOver() {
-        console.log('game over');
-        isGameOver = true;
-        while (grid.firstChild) {
-            grid.removeChild(grid.firstChild);
-        }
-        grid.innerHTML = 'Your score is: ' + score;
-        clearInterval(upTimerId);
-        clearInterval(downTimerId);
-        clearInterval(leftTimerId);
-        clearInterval(rightTimerId);
-    }
-
-    function start() {
-        if (!isGameOver) {
-            createPlatforms();
-            createDoodler();
-            setInterval(movePlatforms, 30);
-            jump(startPoint);
-            document.addEventListener('keyup', control);
-        }
-    }
-    start();
 })

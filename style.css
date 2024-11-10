@@ -1,3 +1,11 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url(moo-deng.jpg);
+    background-size: cover;
+}
+
+/* General Grid Style */
 .grid {
     width: 400px;
     height: 600px;
@@ -11,6 +19,7 @@
     align-items: center;    /* Centers vertically */
 }
 
+/* Doodler and Platform Styles */
 .doodler {
     width: 60px;
     height: 85px;
@@ -23,4 +32,53 @@
     height: 15px;
     background-image: url(platform.png);
     position: absolute;
+}
+
+/* Landing and Game Over Pages */
+#landing-page, #game-over {
+    width: 400px;
+    height: 600px;
+    background-image: url(background.png);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em; /* Adjust font size for better readability */
+    margin: 0 auto;
+    color: #000000; /* White text for better contrast on background */
+    text-align: center; /* Ensures text within div is centered */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Subtle shadow for readability */
+}
+
+/* Headings and Text for Landing and Game Over Screens */
+#landing-page h1, #game-over h1 {
+    font-size: 3em; /* Larger font for main headings */
+    margin: 0;
+    padding: 0; /* Removed padding to prevent offset */
+    font-family: 'Gloria Hallelujah', cursive; /* Adds a playful, doodle-like font */
+    width: 100%; /* Ensures heading takes full width for centering */
+    display: flex;
+    justify-content: center; /* Centers text within heading element */
+}
+
+/* Button Styling */
+button {
+    padding: 12px 24px;
+    font-size: 1.2em;
+    margin-top: 20px;
+    background-color: #ffcc00; /* Bright button color for visibility */
+    border: none;
+    border-radius: 10px; /* Rounded edges for a softer look */
+    color: #333; /* Dark text for readability on light button background */
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.3s;
+}
+
+button:hover {
+    background-color: #ffaa00; /* Slightly darker color on hover */
+    transform: scale(1.05); /* Small scale effect on hover */
+}
+
+button:active {
+    transform: scale(0.95); /* Smaller scale effect on active press */
 }
