@@ -1,22 +1,160 @@
-body {
-    margin: 0;
-    padding: 0;
-    background-image: url(moo-deng.jpg);
-    background-size: cover;
+@media (min-width: 1025px) {
+    /* General Styles */
+    body {
+        margin: 0;
+        padding: 0;
+        background-image: url(moo-deng.jpg);
+        background-size: cover;
+        background-position: center;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden; /* Ensures no scrolling */
+    }
+
+    /* General Grid Style */
+    .grid {
+        width: 400px;
+        height: 600px;
+        background-image: url(background.png);
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        font-size: 50px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto; /* Center grid horizontally and vertically */
+        top: 50%;
+        transform: translateY(-50%); /* Center the grid vertically */
+    }
+
+    /* Landing and Game Over Pages */
+    .landing, .over {
+        width: 400px;
+        height: 600px;
+        background-image: url(background.png);
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 2em;
+        color: #000000;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        margin: auto;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .landing h1, .over h1 {
+        font-size: 16;
+        margin: 0;
+        padding: 0;
+        font-family: 'Gloria Hallelujah', cursive;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Button Styling */
+    button {
+        padding: 12px 24px;
+        font-size: 1.2em;
+        margin-top: 20px;
+        background-color: #ffcc00;
+        border: none;
+        border-radius: 10px;
+        color: #333;
+        cursor: pointer;
+        transition: transform 0.1s ease, background-color 0.3s;
+    }
 }
 
-/* General Grid Style */
-.grid {
-    width: 400px;
-    height: 600px;
-    background-image: url(background.png);
-    position: relative;
-    font-size: 50px;
-    text-align: center;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center;    /* Centers vertically */
+/* Responsive Mobile Styles */
+@media (max-width: 1024px) {
+    .grid {
+        background-image: url(background.png);
+        width: 400px;
+        height: 600px;
+        margin: auto;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        font-size: 50px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative; /* Positioning needed for centering with transform */
+        left: 50%;
+        top: 45%;
+        transform: translate(-50%, -50%); /* Centers element horizontally and vertically */
+        flex-direction: column;
+        overflow: hidden; /* Hide overflow */
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        background-image: url(moo-deng.jpg);
+        background-size: cover;
+        background-position: center;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden; /* Hide overflow */
+        display: flex;
+        justify-content: center;
+        align-items: center; /* Centers content horizontally and vertically */
+    }
+    
+    .landing, .over {
+        width: 400px;
+        height: 600px;
+        font-size: 20px;
+        color: #000000;
+        background-image: url(background.png);
+        background-size: cover;
+        background-position: center;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative; /* Positioning needed for centering with transform */
+        left: 50%;
+        top: 45%;
+        transform: translate(-50%, -50%); /* Centers element horizontally and vertically */
+        margin: auto;
+        overflow: hidden; /* Hide overflow */
+    }
+    
+    .landing h1, .over h1 {
+        font-size: 3em;
+        margin: 0;
+        padding: 0;
+        font-family: 'Gloria Hallelujah', cursive;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }    
+
+    /* Button Styling */
+    button {
+        padding: 12px 24px;
+        font-size: 1.2em;
+        margin-top: 20px;
+        background-color: #ffcc00;
+        border: none;
+        border-radius: 10px;
+        color: #333;
+        cursor: pointer;
+        transition: transform 0.1s ease, background-color 0.3s;
+    }
 }
 
 /* Doodler and Platform Styles */
@@ -34,51 +172,11 @@ body {
     position: absolute;
 }
 
-/* Landing and Game Over Pages */
-#landing-page, #game-over {
-    width: 400px;
-    height: 600px;
-    background-image: url(background.png);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 2em; /* Adjust font size for better readability */
-    margin: 0 auto;
-    color: #000000; /* White text for better contrast on background */
-    text-align: center; /* Ensures text within div is centered */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Subtle shadow for readability */
-}
-
-/* Headings and Text for Landing and Game Over Screens */
-#landing-page h1, #game-over h1 {
-    font-size: 3em; /* Larger font for main headings */
-    margin: 0;
-    padding: 0; /* Removed padding to prevent offset */
-    font-family: 'Gloria Hallelujah', cursive; /* Adds a playful, doodle-like font */
-    width: 100%; /* Ensures heading takes full width for centering */
-    display: flex;
-    justify-content: center; /* Centers text within heading element */
-}
-
-/* Button Styling */
-button {
-    padding: 12px 24px;
-    font-size: 1.2em;
-    margin-top: 20px;
-    background-color: #ffcc00; /* Bright button color for visibility */
-    border: none;
-    border-radius: 10px; /* Rounded edges for a softer look */
-    color: #333; /* Dark text for readability on light button background */
-    cursor: pointer;
-    transition: transform 0.1s ease, background-color 0.3s;
-}
-
 button:hover {
-    background-color: #ffaa00; /* Slightly darker color on hover */
-    transform: scale(1.05); /* Small scale effect on hover */
+    background-color: #ffaa00;
+    transform: scale(1.05);
 }
 
 button:active {
-    transform: scale(0.95); /* Smaller scale effect on active press */
+    transform: scale(0.95);
 }

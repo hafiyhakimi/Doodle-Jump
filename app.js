@@ -20,7 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let rightTimerId;
     let score = 0;
     let platformIntervalId;
-    let currentDirection = null; // To track current swipe direction
+    let xDown = null;
+    let yDown = null;
+    let currentDirection = null;
 
     // Start Game
     startButton.addEventListener('click', start);
@@ -85,8 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(downTimerId);
         isJumping = true;
         upTimerId = setInterval(function () {
-            doodlerBottomSpace += 20;
-            doodler.style.bottom = doodlerBottomSpace + 'px';
+            if (doodlerBottomSpace <= 500) {
+                doodlerBottomSpace += 20;
+                doodler.style.bottom = doodlerBottomSpace + 'px';
+            } else fall();
             if (doodlerBottomSpace > startPoint + 200) {
                 fall();
             }
@@ -124,8 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(leftTimerId);
         clearInterval(rightTimerId);
         currentDirection = null;
-        clearInterval(upTimerId);
-        clearInterval(downTimerId);
     }
 
 
@@ -133,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Display Game Over Screen
     function gameOver() {
         isGameOver = true;
+        isJumping = false;
 
         // Clear the interval for moving platforms
         clearInterval(platformIntervalId);
@@ -176,8 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
             score = 0;  // Reset score
             isGameOver = false;  // Game is not over anymore
             platforms = [];  // Reset platforms array
-            doodler.style.bottom = doodlerBottomSpace + 'px';  // Reset doodler vertical position
-            doodler.style.left = doodlerLeftSpace + 'px';  // Reset doodler horizontal position
 
             // Clear any existing platforms and doodler
             while (gameArea.firstChild) {
@@ -186,6 +187,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Hide game over page and show game area
             gameArea.style.display = 'block';
+
+            // Reset doodler position
+            // Reset start point
+            startPoint = 150;
+            doodler.style.bottom = 0 + 'px';  // Reset doodler vertical position
+            doodler.style.left = 50 + 'px';  // Reset doodler horizontal position
 
             // Reset timers
             clearInterval(upTimerId);
@@ -208,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Re-start the game loop
         // Start platform movement interval (ensure only one interval is running)
         platformIntervalId = setInterval(movePlatforms, 30);
+        console.log(startPoint);
         jump(startPoint);
 
         // Reattach event listeners for controls
@@ -258,35 +266,46 @@ document.addEventListener('DOMContentLoaded', () => {
         const firstTouch = evt.touches[0];
         xDown = firstTouch.clientX;
         yDown = firstTouch.clientY;
-    };
+    }
     
-    function handleTouchStart(e) {
-        const touchX = e.touches[0].clientX;
-        const centerX = window.innerWidth / 2;
-
-        resetMovementStates();
+    function handleTouchEnd(evt) {
+        if (!xDown || !yDown) return;
     
-        // Determine direction based on touch location (left or right half of screen)
-        if (touchX < centerX) {
-            if (currentDirection !== 'left') {
+        const xUp = evt.changedTouches[0].clientX;
+        const yUp = evt.changedTouches[0].clientY;
+    
+        const xDiff = xDown - xUp;
+        const yDiff = yDown - yUp;
+    
+        // Determine the swipe direction
+        if (Math.abs(xDiff) > Math.abs(yDiff)) {
+            // Horizontal swipe
+            if (xDiff > 0 && currentDirection !== 'left') {
+                // Swipe left
+                resetMovementStates();
                 moveLeft();
                 currentDirection = 'left';
-            }
-        } else {
-            if (currentDirection !== 'right') {
+            } else if (xDiff < 0 && currentDirection !== 'right') {
+                // Swipe right
+                resetMovementStates();
                 moveRight();
                 currentDirection = 'right';
             }
+        } else {
+            // Vertical swipe (up or down), for this, we can keep it moving straight if necessary
+            resetMovementStates();
+            moveStraight();
+            currentDirection = 'straight';
         }
+    
+        // Reset starting coordinates
+        xDown = null;
+        yDown = null;
     }
     
-    function handleTouchEnd(e) {
-        // Continue moving in the last direction, do not stop on touch end
-        // (Remove or comment out any movement reset logic here)
-    }
-
-    // Call resetMovementStates if the user taps without swiping
-    gameArea.addEventListener('click', moveStraight);
+    // Attach the touch start and end listeners to the game area
+    gameArea.addEventListener('touchstart', handleTouchStart);
+    gameArea.addEventListener('touchend', handleTouchEnd);
     
     function control(e) {
         doodler.style.bottom = doodlerBottomSpace + 'px';
