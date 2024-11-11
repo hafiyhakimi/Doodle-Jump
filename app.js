@@ -161,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.removeEventListener('keyup', control);
         document.removeEventListener('touchstart', handleTouchStart);
         document.removeEventListener('touchmove', handleTouchMove);
-        document.removeEventListener('touchend', handleTouchEnd);
     }
 
     // Start or Restart Game
@@ -213,7 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('keyup', control);
         document.addEventListener('touchstart', handleTouchStart, false);
         document.addEventListener('touchmove', handleTouchMove, false);
-        document.addEventListener('touchend', handleTouchEnd, false);
     }
 
     function moveLeft() {
@@ -288,11 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
         yDown = null;
     };
     
-    function handleTouchEnd(evt) {
-        // Reset movement when touch ends
-        moveStraight();
-    }
-
     function control(e) {
         doodler.style.bottom = doodlerBottomSpace + 'px';
         if (e.key === 'ArrowLeft' || e.key === 'a') {
