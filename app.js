@@ -20,8 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let rightTimerId;
     let score = 0;
     let platformIntervalId;
-    let xDown = null;
-    let yDown = null;
+    let currentDirection = null; // To track current swipe direction
 
     // Start Game
     startButton.addEventListener('click', start);
@@ -124,6 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
         isGoingRight = false;
         clearInterval(leftTimerId);
         clearInterval(rightTimerId);
+        currentDirection = null;
+        clearInterval(upTimerId);
+        clearInterval(downTimerId);
     }
 
 
@@ -160,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Remove event listeners for controls
         document.removeEventListener('keyup', control);
         document.removeEventListener('touchstart', handleTouchStart);
-        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
     }
 
     // Start or Restart Game
@@ -210,8 +212,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Reattach event listeners for controls
         document.addEventListener('keyup', control);
-        document.addEventListener('touchstart', handleTouchStart, false);
-        document.addEventListener('touchmove', handleTouchMove, false);
+        document.addEventListener('touchstart', handleTouchStart);
+        document.addEventListener('touchend', handleTouchEnd);
     }
 
     function moveLeft() {
@@ -249,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isGoingRight = false;
         clearInterval(leftTimerId);
         clearInterval(rightTimerId);
+        currentDirection = null;
     }
 
     function handleTouchStart(evt) {
@@ -257,34 +260,31 @@ document.addEventListener('DOMContentLoaded', () => {
         yDown = firstTouch.clientY;
     };
     
-    function handleTouchMove(evt) {
-        if (!xDown || !yDown) {
-            return;
-        }
+    function handleTouchStart(e) {
+        const touchX = e.touches[0].clientX;
+        const centerX = window.innerWidth / 2;
     
-        const xUp = evt.touches[0].clientX;
-        const yUp = evt.touches[0].clientY;
-    
-        const xDiff = xDown - xUp;
-        const yDiff = yDown - yUp;
-    
-        if (Math.abs(xDiff) > Math.abs(yDiff)) { // Detect horizontal swipe
-            if (xDiff > 0) {
-                // Left swipe
+        // Determine direction based on touch location (left or right half of screen)
+        if (touchX < centerX) {
+            if (currentDirection !== 'left') {
                 moveLeft();
-            } else {
-                // Right swipe
-                moveRight();
+                currentDirection = 'left';
             }
-        } else if (yDiff < 0) {
-            // Up swipe or tap (optional: start jump on upward swipe)
-            jump();
+        } else {
+            if (currentDirection !== 'right') {
+                moveRight();
+                currentDirection = 'right';
+            }
         }
+    }
     
-        // Reset starting touch position after detecting a swipe
-        xDown = null;
-        yDown = null;
-    };
+    function handleTouchEnd(e) {
+        // Continue moving in the last direction, do not stop on touch end
+        // (Remove or comment out any movement reset logic here)
+    }
+
+    // Call resetMovementStates if the user taps without swiping
+    document.addEventListener('click', moveStraight);
     
     function control(e) {
         doodler.style.bottom = doodlerBottomSpace + 'px';
