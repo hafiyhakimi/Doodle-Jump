@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let rightTimerId;
     let score = 0;
     let platformIntervalId;
+    let xDown = null;
+    let yDown = null;
 
     // Start Game
     startButton.addEventListener('click', start);
@@ -157,6 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Remove event listeners for controls
         document.removeEventListener('keyup', control);
+        document.removeEventListener('touchstart', handleTouchStart);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
     }
 
     // Start or Restart Game
@@ -170,8 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
             score = 0;  // Reset score
             isGameOver = false;  // Game is not over anymore
             platforms = [];  // Reset platforms array
-            doodlerBottomSpace = startPoint;  // Reset doodler position
-            doodlerLeftSpace = 50;  // Reset doodler horizontal position
+            doodler.style.bottom = doodlerBottomSpace + 'px';  // Reset doodler vertical position
+            doodler.style.left = doodlerLeftSpace + 'px';  // Reset doodler horizontal position
 
             // Clear any existing platforms and doodler
             while (gameArea.firstChild) {
@@ -206,6 +211,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Reattach event listeners for controls
         document.addEventListener('keyup', control);
+        document.addEventListener('touchstart', handleTouchStart, false);
+        document.addEventListener('touchmove', handleTouchMove, false);
+        document.addEventListener('touchend', handleTouchEnd, false);
     }
 
     function moveLeft() {
@@ -243,6 +251,46 @@ document.addEventListener('DOMContentLoaded', () => {
         isGoingRight = false;
         clearInterval(leftTimerId);
         clearInterval(rightTimerId);
+    }
+
+    function handleTouchStart(evt) {
+        const firstTouch = evt.touches[0];
+        xDown = firstTouch.clientX;
+        yDown = firstTouch.clientY;
+    };
+    
+    function handleTouchMove(evt) {
+        if (!xDown || !yDown) {
+            return;
+        }
+    
+        const xUp = evt.touches[0].clientX;
+        const yUp = evt.touches[0].clientY;
+    
+        const xDiff = xDown - xUp;
+        const yDiff = yDown - yUp;
+    
+        if (Math.abs(xDiff) > Math.abs(yDiff)) { // Detect horizontal swipe
+            if (xDiff > 0) {
+                // Left swipe
+                moveLeft();
+            } else {
+                // Right swipe
+                moveRight();
+            }
+        } else if (yDiff < 0) {
+            // Up swipe or tap (optional: start jump on upward swipe)
+            jump();
+        }
+    
+        // Reset starting touch position after detecting a swipe
+        xDown = null;
+        yDown = null;
+    };
+    
+    function handleTouchEnd(evt) {
+        // Reset movement when touch ends
+        moveStraight();
     }
 
     function control(e) {
