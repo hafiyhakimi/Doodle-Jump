@@ -263,6 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleTouchStart(e) {
         const touchX = e.touches[0].clientX;
         const centerX = window.innerWidth / 2;
+
+        resetMovementStates();
     
         // Determine direction based on touch location (left or right half of screen)
         if (touchX < centerX) {
@@ -284,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Call resetMovementStates if the user taps without swiping
-    document.addEventListener('click', moveStraight);
+    gameArea.addEventListener('click', moveStraight);
     
     function control(e) {
         doodler.style.bottom = doodlerBottomSpace + 'px';

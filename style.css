@@ -55,7 +55,7 @@ body {
     font-size: 3em; /* Larger font for main headings */
     margin: 0;
     padding: 0; /* Removed padding to prevent offset */
-    font-family: 'Gloria Hallelujah'; /* Adds a playful, doodle-like font */
+    font-family: 'Gloria Hallelujah', cursive; /* Adds a playful, doodle-like font */
     width: 100%; /* Ensures heading takes full width for centering */
     display: flex;
     justify-content: center; /* Centers text within heading element */
