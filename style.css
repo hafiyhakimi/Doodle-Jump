@@ -76,62 +76,64 @@
 
 /* Responsive Mobile Styles */
 @media (max-width: 1024px) {
-    .grid {
-        background-image: url(background.png);
-        width: 400px;
-        height: 600px;
-        margin: auto;
-        background-size: cover;
-        background-position: center;
-        position: relative;
-        font-size: 50px;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative; /* Positioning needed for centering with transform */
-        left: 50%;
-        top: 45%;
-        transform: translate(-50%, -50%); /* Centers element horizontally and vertically */
-        flex-direction: column;
-        overflow: hidden; /* Hide overflow */
-    }
+    /* Universal box sizing for consistent dimensions */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    html, body {
-        margin: 0;
-        padding: 0;
-        background-image: url(moo-deng.jpg);
-        background-size: cover;
-        background-position: center;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden; /* Hide overflow */
-        display: flex;
-        justify-content: center;
-        align-items: center; /* Centers content horizontally and vertically */
-    }
-    
-    .landing, .over {
-        width: 400px;
-        height: 600px;
-        font-size: 20px;
-        color: #000000;
-        background-image: url(background.png);
-        background-size: cover;
-        background-position: center;
-        text-align: center;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        position: relative; /* Positioning needed for centering with transform */
-        left: 50%;
-        top: 45%;
-        transform: translate(-50%, -50%); /* Centers element horizontally and vertically */
-        margin: auto;
-        overflow: hidden; /* Hide overflow */
-    }
+/* Main HTML and Body Setup */
+html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column; /* Align elements vertically */
+    justify-content: flex-start; /* Align content to the top */
+    align-items: center; /* Center content horizontally */
+    background-image: url(moo-deng.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+/* Main grid container for the game */
+.grid {
+    background-image: url(background.png);
+    width: 400px;
+    height: 600px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 0 auto; /* Horizontally centers within parent */
+    position: relative;
+    font-size: 50px;
+    text-align: center;
+}
+
+/* Styles for landing and game over screens */
+.landing, .over {
+    width: 400px;
+    height: 600px;
+    background-image: url(background.png);
+    background-size: cover;
+    background-position: center;
+    color: #000000;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    margin: 0 auto; /* Centers horizontally */
+    overflow: hidden;
+}
     
     .landing h1, .over h1 {
         font-size: 3em;
